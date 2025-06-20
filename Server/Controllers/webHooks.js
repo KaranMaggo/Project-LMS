@@ -5,9 +5,9 @@ import User from "../Models/User";
 
 export const clerkWebHooks = async (req, res) => {
   try {
-    const whook = new Webhook(process.env.CLERK_WEBHOOK_SECERT);
+    const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
 
-    await whook.verify(json.stringify(req.body), {
+    await whook.verify(JSON.stringify(req.body), {
       "svix-id": req.headers["svix-id"],
       "svix-timestamp": req.headers["svix-timestamp"],
       "svix-signature": req.headers["svix-signature"],
@@ -32,7 +32,7 @@ export const clerkWebHooks = async (req, res) => {
           name: data.first_name + "" + data.last_name,
           imageUrl: data.image_url,
         };
-        await User.findByIdAndDelete(data.id, userData);
+        await User.findByIdAndUpdate(data.id, userData);
         res.json({});
         break;
       }
