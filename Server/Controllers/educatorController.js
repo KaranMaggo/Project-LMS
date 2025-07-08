@@ -3,6 +3,7 @@ import { json } from "express";
 import Course from "../Models/Course.js";
 import { v2 as cloudinary } from "cloudinary";
 import { Purchase } from "../Models/Purchase.js";
+import User from "../Models/User.js";
 
 //update role to educator
 export const updateRoleEducator = async (req, res) => {
@@ -80,7 +81,7 @@ export const educatorDashboardData = async (req, res) => {
     //Collect Unique enrolled students Ids with their course Title
     const enrolledStudentData = [];
     for (const course of courses) {
-      const students = await find(
+      const students = await User.find(
         {
           _id: { $in: course.enrolledStudents },
         },

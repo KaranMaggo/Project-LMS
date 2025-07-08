@@ -55,7 +55,7 @@ export const clerkWebHooks = async (req, res) => {
 };
 
 const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY);
-export const stripeWebhooks = async (request, response) => {
+export const stripeWebhooks = async (req, res) => {
   const sig = req.headers["stripe-signature"];
 
   let event;
@@ -85,7 +85,7 @@ export const stripeWebhooks = async (request, response) => {
       const { purchaseId } = session.data[0].metadata;
 
       const purchaseData = await Purchase.findById(purchaseId);
-      const userData = await User.findById(purchaseId);
+      const userData = await User.findById(purchaseData.userId); // ✅ Correct
       const courseData = await Course.findById(
         purchaseData.courseId.toString()
       );
