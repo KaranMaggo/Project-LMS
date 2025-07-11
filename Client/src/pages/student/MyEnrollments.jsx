@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import Footer from "../../components/student/Footer";
 
 
+
 const MyEnrollments = () => {
   const { enrolledCourses,calculateCourseDuration,navigate,userData,fetchuserEnrolledCourses,backendUrl,getToken,calcualateNoOfLectures } = useContext(AppContext);
 
