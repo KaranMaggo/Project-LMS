@@ -1,45 +1,61 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../Context/AppContext";
-import {Line} from 'rc-progress'
+import { Line } from "rc-progress";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Footer from "../../components/student/Footer";
 
-
-
 const MyEnrollments = () => {
-  const { enrolledCourses,calculateCourseDuration,navigate,userData,fetchuserEnrolledCourses,backendUrl,getToken,calcualateNoOfLectures } = useContext(AppContext);
+  const {
+    enrolledCourses,
+    calculateCourseDuration,
+    navigate,
+    userData,
+    fetchuserEnrolledCourses,
+    backendUrl,
+    getToken,
+    calcualateNoOfLectures,
+  } = useContext(AppContext);
 
-  const [progressArray,setProgressArray]=useState([ ])
-  const getCourseProgress=async()=>{
+  const [progressArray, setProgressArray] = useState([]);
+  const getCourseProgress = async () => {
     try {
-      const token =await getToken();
-      const tempProgressArray=await Promise.all(enrolledCourses.map(async(course)=>{
-        const {data}= await axios.post(`${backendUrl}api/user/get-course-progress`,{
-          courseId:course._id},{
-            headers:{Authorization:`Bearer ${token}`}})
-            let totalLectures=calcualateNoOfLectures(course);
- const lectureCompleted=data.progressData?data.progressData.lectureCompleted.length:0;
- return {totalLectures,lectureCompleted}
- }))
- setProgressArray(tempProgressArray);
+      const token = await getToken();
+      const tempProgressArray = await Promise.all(
+        enrolledCourses.map(async (course) => {
+          const { data } = await axios.post(
+            `${backendUrl}api/user/get-course-progress`,
+            {
+              courseId: course._id,
+            },
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
+          let totalLectures = calcualateNoOfLectures(course);
+          const lectureCompleted = data.progressData
+            ? data.progressData.lectureCompleted.length
+            : 0;
+          return { totalLectures, lectureCompleted };
+        })
+      );
+      setProgressArray(tempProgressArray);
     } catch (error) {
-      toast.error(error.message)
+      toast.error(error.message);
     }
-  }
+  };
 
-  useEffect(()=>{
-if(userData){
-  fetchuserEnrolledCourses()
-}
-  },[userData])
+  useEffect(() => {
+    if (userData) {
+      fetchuserEnrolledCourses();
+    }
+  }, [userData]);
 
-  
-  useEffect(()=>{
-if(enrolledCourses.length>0){
-  getCourseProgress()
-}
-  },[enrolledCourses])
+  useEffect(() => {
+    if (enrolledCourses.length > 0) {
+      getCourseProgress();
+    }
+  }, [enrolledCourses]);
 
   return (
     <>
@@ -68,22 +84,36 @@ if(enrolledCourses.length>0){
                     <p className="mb-1 max-sm:text-sm">{course.courseTitle}</p>
                     <Line
                       strokeWidth={2}
-                      percent={progressArray[index] ? (progressArray[index].lectureCompleted * 100) / progressArray[index].totalLectures : 0}
+                      percent={
+                        progressArray[index]
+                          ? (progressArray[index].lectureCompleted * 100) /
+                            progressArray[index].totalLectures
+                          : 0
+                      }
                       trailColor="#e5e7eb"
                       strokeColor="#2563eb"
                     />
                   </div>
                 </td>
                 <td className="px-4 py-3 max-sm:hidden">
-{calculateCourseDuration(course)}
+                  {calculateCourseDuration(course)}
                 </td>
                 <td className="px-4 py-3 max-sm:hidden">
-                  {progressArray[index]&& `${progressArray[index].lectureCompleted} /${progressArray[index].totalLectures}`} <span>Lectures</span>
+                  {progressArray[index] &&
+                    `${progressArray[index].lectureCompleted} /${progressArray[index].totalLectures}`}{" "}
+                  <span>Lectures</span>
                 </td>
                 <td className="px-4 py-3 max-sm:text-right">
-                  <button onClick={()=>navigate('/player/'+course._id)} className="px-3 sm:px-5 py-1.5 sm:py-2 rounded bg-blue-600 max-sm:text-xs text-white">
-                    {progressArray[index]&& progressArray[index].lectureCompleted/progressArray[index].totalLectures===1?'Completed':'Ongoing'}
-                    
+                  <button
+                    onClick={() => navigate("/player/" + course._id)}
+                    className="px-3 sm:px-5 py-1.5 sm:py-2 rounded bg-blue-600 max-sm:text-xs text-white"
+                  >
+                    {progressArray[index] &&
+                    progressArray[index].lectureCompleted /
+                      progressArray[index].totalLectures ===
+                      1
+                      ? "Completed"
+                      : "Ongoing"}
                   </button>
                 </td>
               </tr>
@@ -91,7 +121,7 @@ if(enrolledCourses.length>0){
           </tbody>
         </table>
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };
