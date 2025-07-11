@@ -1,9 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../Context/AppContext";
 import {Line} from 'rc-progress'
-
 import axios from "axios";
-import { data } from "react-router-dom";
 import { toast } from "react-toastify";
 import Footer from "../../components/student/Footer";
 
@@ -40,7 +38,7 @@ if(userData){
 if(enrolledCourses.length>0){
   getCourseProgress()
 }
-  },[userData])
+  },[enrolledCourses])
 
   return (
     <>
