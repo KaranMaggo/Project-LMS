@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-const Rating = ({intialRating,onRate}) => {
-  const [rating, setRating] = useState(intialRating || 0);
+const Rating = ({initialRating,onRate}) => {
+  const [rating, setRating] = useState(initialRating || 0);
 
   const handleRating=(value)=>{
     setRating(value);
@@ -9,10 +9,10 @@ const Rating = ({intialRating,onRate}) => {
   }
 
   useEffect(()=>{
-if(intialRating){
-  setRating(intialRating)
+if(initialRating){
+  setRating(initialRating)
 }
-  },[intialRating])
+  },[initialRating])
   return (
     <div>
       {Array.from({ length: 5 }, (_, index) => {
@@ -20,8 +20,7 @@ if(intialRating){
         return (
           <span onClick={()=>handleRating(starValue)}
             key={index}
-            className={`text-xl sm:text-2xl cursor-pointer transition-colors${
-              starValue <= rating? 'text-yellow-500':'text-gray-400'
+            className={`text-xl sm:text-2xl cursor-pointer transition-colors${starValue <= rating? 'text-yellow-500':'text-gray-400'
             }`}
           >
             &#9733;
