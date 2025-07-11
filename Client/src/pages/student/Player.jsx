@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 import Loading from "../../components/student/Loading";
 
 const Player = () => {
-  const { enrolledCourses, calculateChapterTime,getToken,backendUrl,userDat,fetchuserEnrolledCourses } = useContext(AppContext);
+  const { enrolledCourses, calculateChapterTime,getToken,backendUrl,userData,fetchuserEnrolledCourses } = useContext(AppContext);
   const { courseId } = useParams();
   const [courseData, setCourseData] = useState(null);
   const [openSections, setOpenSections] = useState({});
@@ -27,7 +27,7 @@ const Player = () => {
       if (course._id === courseId) {
         setCourseData(course);
         course.courseRatings.map((item)=>{
-          if(item.userId===userId,_id){
+          if(item.userId===userId._id){
            setIntialRating(item.rating)
           }
         })
@@ -50,6 +50,7 @@ try {
   const {data}= await axios.post(backendUrl+'/api/user/update-course-progress',{
     courseId,lectureId
   },{headers:{Authorization:`Bearer ${token}`}})
+  console.log(data);
   if(data.success){
     toast.success(data.message)
   }
@@ -67,7 +68,8 @@ try {
     try {
   const token= await getToken();
       const {data}= await axios.post (backendUrl+'/api/user/get-course-progress',{courseId},{headers:{Authorization:`Bearer ${token}`}})
-    if(data.success){
+   console.log(data);
+      if(data.success){
       setProgressData(data.progressData)
     }
     else{
@@ -148,7 +150,7 @@ getCourseProgress()
                         <li key={i} className="flex items-start gap-2 py-1">
                           <img
                             src={
-                              progressData && progressData.lectureComplted.includes(lecture.lectureId) ? assets.blue_tick_icon : assets.play_icon
+                              progressData?.lectureComplted?.includes(lecture.lectureId) ? assets.blue_tick_icon : assets.play_icon
                             }
                             alt="play icon"
                             className="w-4 h-4 mt-1"

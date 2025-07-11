@@ -13,8 +13,10 @@ const DashBorad = () => {
     try {
       const token = await getToken()
       const {data}= await axios.get(backendUrl +'/api/educator/dashboard',{headers:{Authorization:`Bearer ${token}`}})
-if(data.success){
-  setDashboardData(data.dashboardData)
+console.log(data);
+      if(data.success){
+  setDashboardData(data.DashboardData)
+
 }
 else{
   toast.error(data.message)
@@ -24,10 +26,13 @@ else{
       
     }
   }
+  // console.log(dashboardData);
 
   useEffect(()=>{
-    if(isEducator)
+    console.log("isEducator:", isEducator)
+    if(isEducator){
     fetchDashboardData()
+    }
   },[isEducator])
 
   return  dashboardData?(
@@ -38,7 +43,7 @@ else{
  <img src={assets.patients_icon} alt="patients_
  icon" />
  <div className=''>
-  <p className='text-2xl font-medium text-gray-600'>{dashboardData.enrolledStudentsData.length}</p>
+  <p className='text-2xl font-medium text-gray-600'>{dashboardData?.enrolledStudentsData?.length ?? 0}</p>
   <p className='text-base text-gray-500'>Total Enrolments</p>
  </div>
   </div>
@@ -72,7 +77,7 @@ else{
     </tr>
   </thead>
   <tbody className='text-sm text-gray-500'>
-    {dashboardData.enrolledStudentsData.map((item,index)=>(
+    {dashboardData?.enrolledStudentsData?.map((item, index)=>(
       <tr key={index} className='border-b border-gray-500/20'> 
       <td className='px-4 py-3 text-center hidden sm:table-cell'>
         {index+1}

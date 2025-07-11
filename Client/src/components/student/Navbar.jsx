@@ -23,6 +23,7 @@ const Navbar = () => {
       headers:{
         Authorization:`Bearer ${token}`
       }
+      
     })
     if(data.success){
       setIsEducator(true)
