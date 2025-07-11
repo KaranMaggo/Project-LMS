@@ -4,11 +4,12 @@ import { useParams } from "react-router-dom";
 import { assets } from "../../assets/assets";
 import humanizeDuration from "humanize-duration";
 import YouTube from "react-youtube";
-import Footer from "../../components/student/Footer";
+
 import Rating from "../../Components/Student/Rating";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Loading from "../../components/student/Loading";
+import Footer from "../../components/student/Footer";
 
 const Player = () => {
   const { enrolledCourses, calculateChapterTime,getToken,backendUrl,userData,fetchuserEnrolledCourses } = useContext(AppContext);
@@ -217,7 +218,7 @@ getCourseProgress()
         </div>
       </div>
       
-         <Footer />
+         <Footer/>
 
      
     </>
