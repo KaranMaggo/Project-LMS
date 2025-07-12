@@ -1,26 +1,35 @@
 import React, { useEffect, useState } from "react";
 
-const Rating = ({initialRating,onRate}) => {
+const Rating = ({ initialRating, onRate }) => {
   const [rating, setRating] = useState(initialRating || 0);
 
-  const handleRating=(value)=>{
+  const handleRating = (value) => {
     setRating(value);
-    if(onRate) onRate(value);
-  }
+    if (onRate) onRate(value);
+  };
 
-  useEffect(()=>{
-if(initialRating){
-  setRating(initialRating)
-}
-  },[initialRating])
+  useEffect(() => {
+    if (initialRating) {
+      setRating(initialRating);
+    }
+  }, [initialRating]);
+
   return (
     <div>
       {Array.from({ length: 5 }, (_, index) => {
         const starValue = index + 1;
         return (
-          <span onClick={()=>handleRating(starValue)}
+          <span
+            role="button"
+            aria-label={`Rate ${starValue} stars`}
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleRating(starValue);
+            }}
+            onClick={() => handleRating(starValue)}
             key={index}
-            className={`text-xl sm:text-2xl cursor-pointer transition-colors${starValue <= rating? 'text-yellow-500':'text-gray-400'
+            className={`text-xl sm:text-2xl cursor-pointer transition-colors ${
+              starValue <= rating ? "text-yellow-500" : "text-gray-400"
             }`}
           >
             &#9733;
