@@ -1,10 +1,9 @@
 import { Webhook } from "svix";
-import User from "../Models/User.js";
+import User from "./../Models/User.js";
 import Stripe from "stripe";
 import { Purchase } from "../Models/Purchase.js";
 import Course from "../Models/Course.js";
-
-// api Controller Function to manage Clerk user with Database
+// API Controller function to manage clerk user with database
 
 export const clerkWebHooks = async (req, res) => {
   try {
@@ -15,7 +14,9 @@ export const clerkWebHooks = async (req, res) => {
       "svix-timestamp": req.headers["svix-timestamp"],
       "svix-signature": req.headers["svix-signature"],
     });
+
     const { data, type } = req.body;
+
     switch (type) {
       case "user.created": {
         const userData = {
@@ -31,17 +32,17 @@ export const clerkWebHooks = async (req, res) => {
 
       case "user.updated": {
         const userData = {
-          email: data.email_address[0].email_address,
-          name: data.first_name + "" + data.last_name,
+          email: data.email_addresses[0].email_address,
+          name: data.first_name + " " + data.last_name,
           imageUrl: data.image_url,
         };
         await User.findByIdAndUpdate(data.id, userData);
         res.json({});
         break;
       }
+
       case "user.deleted": {
         await User.findByIdAndDelete(data.id);
-
         res.json({});
         break;
       }
@@ -55,49 +56,49 @@ export const clerkWebHooks = async (req, res) => {
 };
 
 const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY);
-export const stripeWebhooks = async (req, res) => {
-  const sig = req.headers["stripe-signature"];
+
+export const stripeWebhooks = async (request, response) => {
+  const sig = request.headers["stripe-signature"];
 
   let event;
 
   try {
-    event = Stripe.webhooks.constructEvent(
-      req.body,
+    event = stripeInstance.webhooks.constructEvent(
+      request.body,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
     );
-    console.log("✅ Verified event:", event.type);
   } catch (err) {
-    console.error("❌ Webhook signature verification failed:", err.message);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
+    return response.status(400).send(`Webhook Error: ${err.message}`);
   }
 
-  // ✅ Handle Events using switch-case
   switch (event.type) {
-    case "payment_intent.succeeded": {
-      const paymentIntent = event.data.object;
-      const paymentIntentId = paymentIntent.id;
-
-      const session = await stripeInstance.checkout.sessions.list({
-        paymentIntent: paymentIntentId,
-      });
-
-      const { purchaseId } = session.data[0].metadata;
+    case "checkout.session.completed": {
+      const session = event.data.object;
+      const { purchaseId } = session.metadata;
 
       const purchaseData = await Purchase.findById(purchaseId);
-      const userData = await User.findById(purchaseData.userId); // ✅ Correct
-      const courseData = await Course.findById(
-        purchaseData.courseId.toString()
-      );
+      if (!purchaseData) break;
 
-      courseData.enrolledStudents.push(userData);
-      await courseData.save();
+      if (purchaseData.status !== "completed") {
+        purchaseData.status = "completed";
+        await purchaseData.save();
+      }
 
-      userData.enrolledCourses.push(courseData._id);
-      await userData.save();
+      const userData = await User.findById(purchaseData.userId);
+      const courseData = await Course.findById(purchaseData.courseId);
 
-      purchaseData.status = "completed";
-      await purchaseData.save();
+      if (!userData || !courseData) break;
+
+      if (!courseData.enrolledStudents.includes(userData._id)) {
+        courseData.enrolledStudents.push(userData._id);
+        await courseData.save();
+      }
+
+      if (!userData.enrolledCourses.includes(courseData._id)) {
+        userData.enrolledCourses.push(courseData._id);
+        await userData.save();
+      }
 
       break;
     }
@@ -106,22 +107,23 @@ export const stripeWebhooks = async (req, res) => {
       const paymentIntent = event.data.object;
       const paymentIntentId = paymentIntent.id;
 
-      const session = await stripeInstance.checkout.sessions.list({
-        paymentIntent: paymentIntentId,
+      // Still inefficient - better to store session_id directly
+      const sessions = await stripeInstance.checkout.sessions.list({
+        payment_intent: paymentIntentId,
       });
 
-      const { purchaseId } = session.data[0].metadata;
+      const session = sessions.data[0];
+      if (!session) break;
 
-      const purchaseData = await Purchase.findById(purchaseId);
-      purchaseData.status = "failed";
-      await purchaseData.save();
+      const { purchaseId } = session.metadata;
+      await Purchase.findByIdAndUpdate(purchaseId, { status: "failed" });
+
       break;
     }
 
-    // ... handle more event types
     default:
-      console.log(`⚠️ Unhandled event type: ${event.type}`);
+      console.log(`Unhandled event type ${event.type}`);
   }
 
-  res.sendStatus({ received: true });
+  response.json({ received: true });
 };

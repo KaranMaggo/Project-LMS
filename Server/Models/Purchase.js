@@ -1,14 +1,14 @@
 import mongoose, { Schema } from "mongoose";
 
-const PurchaseSchema = new mongoose.Schema(
+const PurchaseSchema = new Schema(
   {
     courseId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Course",
       required: true,
     },
     userId: {
-      type: String,
+      type: String, // Clerk ID (string)
       ref: "User",
       required: true,
     },
@@ -25,4 +25,5 @@ const PurchaseSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const Purchase = mongoose.model("Purchase", PurchaseSchema);
+export const Purchase =
+  mongoose.models.Purchase || mongoose.model("Purchase", PurchaseSchema);

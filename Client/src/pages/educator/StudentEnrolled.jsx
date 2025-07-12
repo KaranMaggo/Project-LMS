@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { dummyStudentEnrolled } from '../../assets/assets'
+
 import Loading from '../../components/student/Loading';
 import { AppContext } from '../../Context/AppContext';
 import axios from 'axios';
@@ -56,14 +56,14 @@ fetchEnrolledStudents()
         {index+1}
       </td>
       <td className='md:px-4 px-2 py-3 flex items-center space-x-3'>
-        <img src={item.student.imageUrl} alt=" profile" className='w-9 h-9 rounded-full' />
+        <img src={item?.student?.imageUrl} alt=" profile" className='w-9 h-9 rounded-full' />
         <span className='truncate' >
 {item.student.name}
         </span>
       </td>
       <td className='px-4 py-3 truncate'>{item.courseTitle}</td>
         
-      <td className='px-4 py-3 hidden sm:table-cell'>{new Date (item.purchaseDate).toLocaleDateString()}</td>
+      <td className='px-4 py-3 hidden sm:table-cell'>{item.purchaseDate ? new Date (item.purchaseDate).toLocaleDateString() : 'N/A'}</td>
 
 
       </tr>
