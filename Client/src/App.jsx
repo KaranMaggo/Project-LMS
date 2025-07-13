@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route, useMatch } from "react-router-dom";
-import Home from "./Pages/Student/Home";
+
 import CourseList from "./Pages/Student/CourseList";
 import CourseDetails from "./Pages/Student/CourseDetails";
 import MyEnrollments from "./Pages/Student/MyEnrollments";
@@ -14,6 +14,7 @@ import StudentEnrolled from "./Pages/Educator/StudentEnrolled";
 import Navbar from "./Components/Student/Navbar";
 import "quill/dist/quill.snow.css";
 import { ToastContainer } from 'react-toastify';
+import Home from "./Pages/Student/Home";
 
 
 
