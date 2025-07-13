@@ -19,7 +19,15 @@ await connectDb();
 await connectCloudinary();
 
 //middleware
-app.use(cors());
+const allowedOrigins = ["https://project-lms-frontend-xi.vercel.app"];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true, // only if using cookies or auth headers
+  })
+);
+
 app.use(clerkMiddleware());
 
 //route
