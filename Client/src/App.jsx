@@ -1,6 +1,5 @@
 import React from "react";
 import { Routes, Route, useMatch } from "react-router-dom";
-
 import CourseList from "./Pages/Student/CourseList";
 import CourseDetails from "./Pages/Student/CourseDetails";
 import MyEnrollments from "./Pages/Student/MyEnrollments";
