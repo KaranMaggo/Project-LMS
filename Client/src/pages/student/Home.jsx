@@ -1,10 +1,10 @@
 import React from "react";
-import Hero from "../../components/student/Hero";
-import Companies from "../../components/student/Companies";
-import CourseSection from "../../components/student/CourseSection";
-import Testimonial from "../../components/student/Testimonial";
-import CallToAction from "../../components/student/CallToAction";
-import Footer from "../../components/student/Footer";
+import Hero from "../../Components/Student/Hero";
+import Companies from "../../Components/Student/Companies";
+import CourseSection from "../../Components/Student/CourseSection";
+import Testimonial from "../../Components/Student/Testimonial";
+import CallToAction from "../../Components/Student/CallToAction";
+import Footer from "../../Components/Student/Footer";
 
 const Home = () => {
   return (

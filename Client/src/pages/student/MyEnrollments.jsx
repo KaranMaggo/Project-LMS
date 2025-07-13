@@ -3,6 +3,7 @@ import { AppContext } from "../../Context/AppContext";
 import { Line } from "rc-progress";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Footer from "../../Components/Student/Footer";
 
 const MyEnrollments = () => {
   const {
@@ -120,8 +121,10 @@ const MyEnrollments = () => {
           </tbody>
         </table>
       </div>
+    :(
+    <Footer/>)
     </>
-  );
+    )
 };
 
 export default MyEnrollments;

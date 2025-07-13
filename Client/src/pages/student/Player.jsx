@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import { AppContext } from "./../../Context/AppContext";
+import { AppContext } from "../../Context/AppContext.jsx";
 import { useParams } from "react-router-dom";
-import { assets } from "../../assets/assets";
+import { assets } from "../../assets/assets.js";
 import humanizeDuration from "humanize-duration";
 import YouTube from "react-youtube";
 import axios from "axios";
 import { toast } from "react-toastify";
-import Loading from "../../components/student/Loading";
-import Footer from "../../components/student/Footer";
-import Rating from "../../components/student/Rating.jsx";
+import Footer from "../../Components/Student/Footer.jsx";
+import Loading from '../../Components/Student/Loading.jsx'
 
 const Player = () => {
   const {

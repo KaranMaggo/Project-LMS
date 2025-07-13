@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../Context/AppContext";
-import Searchbar from "../../components/student/Searchbar";
+import Searchbar from "../../Components/Student/Searchbar";
 import { useParams } from "react-router-dom";
-import CourseCard from "../../components/student/CourseCard";
+import CourseCard from "../../Components/Student/CourseCard";
 import { assets } from "../../assets/assets";
-import Footer from "../../components/student/Footer";
+import Footer from "../../Components/Student/Footer";
 
 const CourseList = () => {
   const { navigate, allCourses } = useContext(AppContext);

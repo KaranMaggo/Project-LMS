@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { AppContext } from "../../Context/AppContext";
-import Loading from "../../components/student/Loading";
+import Loading from "../../Components/Student/Loading";
 import { assets } from "../../assets/assets";
 import humanizeDuration from "humanize-duration";
-import Footer from "../../components/student/Footer";
+import Footer from "../../Components/Student/Footer";
 import Youtube from 'react-youtube'
 import axios from "axios";
 import { toast } from "react-toastify";
