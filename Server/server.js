@@ -12,15 +12,14 @@ import userRouter from "./Routes/userRouter.js";
 //Intialize Express
 
 const app = express();
+//middleware
+
+app.use(cors());
 
 // connect to db
 await connectDb();
 //connect to cloudinary
 await connectCloudinary();
-
-//middleware
-
-app.use(cors());
 
 app.use(clerkMiddleware());
 
