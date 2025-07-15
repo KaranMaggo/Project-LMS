@@ -19,18 +19,8 @@ await connectDb();
 await connectCloudinary();
 
 //middleware
-import cors from "cors";
 
-// Your frontend URL deployed on Vercel
-const allowedOrigins = ["https://project-lms-frontend-xi.vercel.app"];
-
-app.use(
-  cors({
-    origin: allowedOrigins,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+app.use(cors());
 
 app.use(clerkMiddleware());
 
